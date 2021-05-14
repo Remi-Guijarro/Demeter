@@ -5,6 +5,7 @@
 #include "DHT.h"
 
 #define DHTPIN 2     // Digital pin connected to the DHT sensor
+#define RELAI 9
 // Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
 // Pin 15 can work but DHT must be disconnected during program upload.
 
@@ -26,7 +27,7 @@ DHT dht(DHTPIN, DHTTYPE);
 void setup() {
   Serial.begin(115200);
   Serial.println(F("DHTxx test!"));
-
+  pinMode(RELAI, OUTPUT);
   dht.begin();
 }
 
@@ -36,7 +37,14 @@ void loop() {
   float h = dht.readHumidity();
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
-
+  String cmd = Serial.readString();
+  if(cmd == "o") {
+    digitalWrite(RELAI,HIGH);
+  } else if(cmd == "p") {
+    digitalWrite(RELAI,LOW);
+  }
+  
+  
   if (isnan(h) || isnan(t)) {
     Serial.println(F("Failed to read from DHT sensor!"));
     return;
