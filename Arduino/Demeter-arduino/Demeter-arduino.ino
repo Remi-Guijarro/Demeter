@@ -6,6 +6,7 @@
 
 #define DHTPIN 2     // Digital pin connected to the DHT sensor
 #define RELAI 9
+
 // Feather HUZZAH ESP8266 note: use pins 3, 4, 5, 12, 13 or 14 --
 // Pin 15 can work but DHT must be disconnected during program upload.
 
@@ -24,8 +25,11 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 
+const int dry = 754; // value for dry sensor
+const int wet = 310; // value for wet sensor
+
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println(F("DHTxx test!"));
   pinMode(RELAI, OUTPUT);
   dht.begin();
@@ -50,6 +54,15 @@ void loop() {
     return;
   }
 
+  int sensorVal = analogRead(A0);
+
+  // Sensor has a range of 239 to 595
+  // We want to translate this to a scale or 0% to 100%
+  // More info: https://www.arduino.cc/reference/en/language/functions/math/map/
+  int percentageHumididy = map(sensorVal, wet, dry, 100, 0); 
+
+  Serial.print(percentageHumididy);
+  Serial.print(" % ");
   Serial.print(F("Humidity: "));
   Serial.print(h);
   Serial.print(F("%  Temperature: "));
