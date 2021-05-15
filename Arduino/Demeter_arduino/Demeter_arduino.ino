@@ -25,8 +25,8 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 
-const int dry = 754; // value for dry sensor
-const int wet = 310; // value for wet sensor
+const int dry = 564; // value for dry sensor
+const int wet = 234; // value for wet sensor
 
 void setup() {
   Serial.begin(9600);
@@ -62,10 +62,8 @@ void loop() {
   int percentageHumididy = map(sensorVal, wet, dry, 100, 0); 
 
   Serial.print(percentageHumididy);
-  Serial.print(" % ");
-  Serial.print(F("Humidity: "));
+  Serial.print(",");
   Serial.print(h);
-  Serial.print(F("%  Temperature: "));
+  Serial.print(F(","));
   Serial.print(t);
-  Serial.println(F("°C "));
 }
